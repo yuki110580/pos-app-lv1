@@ -21,15 +21,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: |
           cd frontend
           npm install
+          npm run build
 
-      - name: Build Next.js app
+      - name: Zip artifact for deployment
         run: |
           cd frontend
-          npm run build
+          zip -r ../frontend.zip .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -37,4 +38,4 @@ jobs:
           app-name: app-step4-69
           slot-name: production
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: frontend/.
+          package: frontend.zip
